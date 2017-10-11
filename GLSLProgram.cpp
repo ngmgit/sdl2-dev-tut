@@ -5,7 +5,7 @@
 #include "Errors.h"
 
 GLSLProgram::GLSLProgram()
-    : _programID(0), _vertexShaderID(0), _fragmentShaderID(0), _numAttributes(0)
+    : _numAttributes(0), _programID(0), _vertexShaderID(0), _fragmentShaderID(0)
 {
 }
 

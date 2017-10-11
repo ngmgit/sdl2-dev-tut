@@ -1,5 +1,8 @@
-#pragma once
+#ifndef ERRORS_H
+#define ERRORS_H
 
 #include <string>
 
-extern void fatalError(const std::string &errorString);
+void fatalError(const std::string &errorString);
+
+#endif
