@@ -4,11 +4,11 @@ GLEW_LINK_FLAG = -lGLEW -lGLU -lGL
 
 CC = g++
 
-COMPILER_FLAGS = -w
+COMPILER_FLAGS = -w -std=c++17 -Wall
 
 LINKER_FLAGS = $(SDL_LINK_FLAG) $(GLEW_LINK_FLAG)
 
-OBJ_NAME = mainoutput
+OBJ_NAME = game
 
 all : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME).app
