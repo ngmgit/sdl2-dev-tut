@@ -60,6 +60,7 @@ void MainGame::initShaders()
     _colorProgram.compileShaders("shaders/colorShading.vert",
                                  "shaders/colorShading.frag");
     _colorProgram.addAttribute("vertexPosition");
+    _colorProgram.addAttribute("vertexColor");
     _colorProgram.linkShaders();
 }
 
