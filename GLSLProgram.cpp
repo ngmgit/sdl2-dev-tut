@@ -88,8 +88,6 @@ void GLSLProgram::compileShader(const std::string &filePath, GLuint id)
         fileContents += line + "\n";
     }
 
-    shaderFile.close();
-
     const char *contentsPtr = fileContents.c_str();
     glShaderSource(id, 1, &contentsPtr, nullptr);
 
