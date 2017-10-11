@@ -4,7 +4,7 @@ GLEW_LINK_FLAG = -lGLEW -lGLU -lGL
 
 CC = g++
 
-COMPILER_FLAGS = -w -std=c++17 -Wall
+COMPILER_FLAGS = -g -std=c++17 -Wall
 
 LINKER_FLAGS = $(SDL_LINK_FLAG) $(GLEW_LINK_FLAG)
 

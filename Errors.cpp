@@ -1,8 +1,8 @@
-#include "Errors.h"
-
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <cstdlib>
+
+#include "Errors.h"
 
 void fatalError(const std::string &errorString)
 {

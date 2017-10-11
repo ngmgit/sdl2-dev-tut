@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-Sprite::Sprite() : _vboID(0), _x(0.0f), _y(0.0f), _width(0.0f), _height(0.0f) {}
+Sprite::Sprite() : _x(0.0f), _y(0.0f), _width(0.0f), _height(0.0f), _vboID(0) {}
 
 Sprite::~Sprite()
 {
