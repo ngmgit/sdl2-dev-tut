@@ -33,3 +33,10 @@
 #editor configs
 /.kdev4/
 sdl2-dev-tut.kdev4
+
+# Folders
+.vscode/*
+
+# Task Runner
+!.vscode/tasks.json
+!.vscode/launch.json
