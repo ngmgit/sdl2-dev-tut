@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAINGAME_H
+#define MAINGAME_H
 
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
@@ -7,7 +8,7 @@
 #include "Sprite.h"
 #include "Errors.h"
 
-enum class GameState {PLAY, EXIT};
+enum class GameState { PLAY, EXIT };
 
 class MainGame {
 public:
@@ -15,7 +16,7 @@ public:
     ~MainGame();
 
     void run();
-    
+
 private:
     void initSystems();
     void initShaders();
@@ -23,7 +24,7 @@ private:
     void gameLoop();
     void drawGame();
 
-    SDL_Window* _window;
+    SDL_Window *_window;
     int _screenWidth;
     int _screenHeight;
     GameState _gameState;
@@ -31,3 +32,5 @@ private:
     Sprite _sprite;
     GLSLProgram _colorProgram;
 };
+
+#endif

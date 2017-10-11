@@ -1,9 +1,6 @@
 #include "Sprite.h"
 
-Sprite::Sprite()
-{
-    _vboID = 0;
-}
+Sprite::Sprite() : _vboID(0), _x(0.0f), _y(0.0f), _width(0.0f), _height(0.0f) {}
 
 Sprite::~Sprite()
 {
@@ -14,9 +11,9 @@ Sprite::~Sprite()
 
 void Sprite::init(float x, float y, float width, float height)
 {
-    _x = x;
-    _y = y;
-    _width = width;
+    _x      = x;
+    _y      = y;
+    _width  = width;
     _height = height;
 
     if (_vboID == 0) {
@@ -41,17 +38,18 @@ void Sprite::init(float x, float y, float width, float height)
 
     vertexData[8] = x + width;
     vertexData[9] = y;
-    
+
     vertexData[10] = x + width;
     vertexData[11] = y + height;
 
     glBindBuffer(GL_ARRAY_BUFFER, _vboID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData,
+                 GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Sprite::draw()
+void Sprite::draw() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 

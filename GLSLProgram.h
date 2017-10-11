@@ -1,15 +1,18 @@
-#pragma once;
+#ifndef GLSLPROGRAM_H
+#define GLSLPROGRAM_H
+
 #include <string>
 #include <GL/glew.h>
 
 class GLSLProgram {
 public:
     GLSLProgram();
-    ~GLSLProgram();
+    ~GLSLProgram() {}
 
-    void compileShaders(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+    void compileShaders(const std::string &vertexShaderPath,
+                        const std::string &fragmentShaderPath);
     void linkShaders();
-    void addAttribute(const std::string& attributeName);
+    void addAttribute(const std::string &attributeName);
     void use();
     void unUse();
 
@@ -20,5 +23,7 @@ private:
     GLuint _vertexShaderID;
     GLuint _fragmentShaderID;
 
-    void compileShader(const std::string& filePath, GLuint id);
+    void compileShader(const std::string &filePath, GLuint id);
 };
+
+#endif

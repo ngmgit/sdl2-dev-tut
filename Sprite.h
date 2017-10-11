@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SPRITE_H
+#define SPRITE_H
+
 #include <GL/glew.h>
 
 class Sprite {
@@ -7,7 +9,7 @@ public:
     ~Sprite();
 
     void init(float x, float y, float width, float height);
-    void draw();
+    void draw() const;
 
 private:
     float _x;
@@ -16,3 +18,5 @@ private:
     float _height;
     GLuint _vboID;
 };
+
+#endif

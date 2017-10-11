@@ -2,4 +2,4 @@
 
 #include <string>
 
-extern void fatalError(std::string errorString);
+extern void fatalError(const std::string &errorString);
