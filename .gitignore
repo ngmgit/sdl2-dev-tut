@@ -1,4 +1,3 @@
-
 *.d
 
 # Compiled Object files
@@ -32,6 +31,5 @@
 *.app
 
 #editor configs
-/.vscode/
 /.kdev4/
 sdl2-dev-tut.kdev4

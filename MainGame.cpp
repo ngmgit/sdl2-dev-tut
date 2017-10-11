@@ -2,21 +2,21 @@
 
 #include "MainGame.h"
 
-MainGame::MainGame() 
+MainGame::MainGame()
+    : _window(nullptr),
+      _screenWidth(1024),
+      _screenHeight(768),
+      _gameState(GameState::PLAY)
 {
-    _window = nullptr;
-    _screenWidth = 1024;
-    _screenHeight = 768;
-    _gameState = GameState::PLAY;
 }
 
-MainGame::~MainGame() 
+MainGame::~MainGame()
 {
     SDL_DestroyWindow(_window);
     _window = NULL;
 }
 
-void MainGame::run() 
+void MainGame::run()
 {
     initSystems();
 
@@ -26,12 +26,14 @@ void MainGame::run()
     gameLoop();
 }
 
-void MainGame::initSystems() 
+void MainGame::initSystems()
 {
     // Intiliaize every sdl module
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    _window = SDL_CreateWindow("Graphics Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL);
+    _window = SDL_CreateWindow("Graphics Engine", SDL_WINDOWPOS_CENTERED,
+                               SDL_WINDOWPOS_CENTERED, _screenWidth,
+                               _screenHeight, SDL_WINDOW_OPENGL);
     if (_window == nullptr) {
         fatalError("SDL window could not be created");
     }
@@ -55,7 +57,8 @@ void MainGame::initSystems()
 
 void MainGame::initShaders()
 {
-    _colorProgram.compileShaders("shaders/colorShading.vert", "shaders/colorShading.frag");
+    _colorProgram.compileShaders("shaders/colorShading.vert",
+                                 "shaders/colorShading.frag");
     _colorProgram.addAttribute("vertexPosition");
     _colorProgram.linkShaders();
 }
@@ -74,16 +77,15 @@ void MainGame::processInput()
 
     while (SDL_PollEvent(&evnt)) {
         switch (evnt.type) {
-        case SDL_QUIT:
-            _gameState = GameState::EXIT;
-            break;
-        case SDL_MOUSEMOTION:
-            std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+            case SDL_QUIT: _gameState = GameState::EXIT; break;
+            case SDL_MOUSEMOTION:
+                std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
         }
     }
 }
 
-void MainGame::drawGame() {
+void MainGame::drawGame()
+{
     glClearDepth(1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
