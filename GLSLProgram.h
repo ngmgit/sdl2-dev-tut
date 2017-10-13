@@ -15,6 +15,7 @@ public:
     void addAttribute(const std::string &attributeName);
     void use();
     void unUse();
+    GLuint getUniformLocation(const std::string &uniformName);
 
 private:
     int _numAttributes;
