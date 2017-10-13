@@ -23,6 +23,7 @@ private:
     void processInput();
     void gameLoop();
     void drawGame();
+    void initDebugCallback();
 
     SDL_Window *_window;
     int _screenWidth;

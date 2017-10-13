@@ -49,11 +49,29 @@ void MainGame::initSystems()
         fatalError("Could not initialize GLEW!");
     }
 
+    initDebugCallback();
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
     initShaders();
+}
+
+void MainGame::initDebugCallback() {
+    std::cout << "GL Debug Enabled!" << std::endl;
+    glEnable(GL_DEBUG_OUTPUT);
+
+    std::cout << "Register OpenGL debug callback " << std::endl;
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(GLSLProgram::openglCallbackFunction, nullptr);
+    GLuint unusedIds = 0;
+    glDebugMessageControl(GL_DONT_CARE,
+        GL_DONT_CARE,
+        GL_DONT_CARE,
+        0,
+        &unusedIds,
+        true);
 }
 
 void MainGame::initShaders()
@@ -94,7 +112,7 @@ void MainGame::drawGame()
 
     _colorProgram.use();
 
-    GLuint timelocation = _colorProgram.getUniformLocation("time");
+    GLint timelocation = _colorProgram.getUniformLocation("time");
     glUniform1f(timelocation, _time);
 
     _sprite.draw();

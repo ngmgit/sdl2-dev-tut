@@ -73,11 +73,6 @@ void Sprite::draw() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 
-    // Tell opengl the we want to use the first
-    // attribute array. We only need one array right
-    // now sincewe only are only using position
-    glEnableVertexAttribArray(0);
-
     // This is the position attribute pointer
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     // This is the color attribute pointer
@@ -85,6 +80,5 @@ void Sprite::draw() const
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

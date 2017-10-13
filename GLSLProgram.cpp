@@ -1,5 +1,6 @@
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 #include "GLSLProgram.h"
 #include "Errors.h"
@@ -72,10 +73,10 @@ void GLSLProgram::addAttribute(const std::string &attributeName)
     glBindAttribLocation(_programID, _numAttributes++, attributeName.c_str());
 }
 
-GLuint GLSLProgram::getUniformLocation(const std::string &uniformName)
+GLint GLSLProgram::getUniformLocation(const std::string &uniformName)
 {
-    GLuint location = glGetUniformLocation(_programID, uniformName.c_str());
-    if(location == GL_INVALID_INDEX) {
+    GLint location = glGetUniformLocation(_programID, uniformName.c_str());
+    if((unsigned)location == GL_INVALID_INDEX) {
         fatalError("Uniform " + uniformName + " not found in shader!");
     }
     return location;
@@ -134,6 +135,61 @@ void GLSLProgram::unUse()
 {
     glUseProgram(0);
     for (int i = 0; i < _numAttributes; i++) {
-        glEnableVertexAttribArray(0);
+        glDisableVertexAttribArray(i);
     }
 }
+
+void GLSLProgram::openglCallbackFunction(
+    GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam)
+{
+
+    std::cout << "*** OPENGL DEBUG CALLBACK: START ***" << std::endl;
+    std::cout << "message: "<< message << std::endl;
+    std::cout << "type: ";
+    switch (type) {
+    case GL_DEBUG_TYPE_ERROR:
+        std::cout << "ERROR";
+        break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+        std::cout << "DEPRECATED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+        std::cout << "UNDEFINED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+        std::cout << "PORTABILITY";
+        break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+        std::cout << "PERFORMANCE";
+        break;
+    case GL_DEBUG_TYPE_OTHER:
+        std::cout << "OTHER";
+        break;
+    }
+
+    std::cout << std::endl;
+
+    std::cout << "id: " << id << std::endl;
+    std::cout << "severity: ";
+
+    switch (severity){
+    case GL_DEBUG_SEVERITY_LOW:
+        std::cout << "LOW";
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        std::cout << "MEDIUM";
+        break;
+    case GL_DEBUG_SEVERITY_HIGH:
+        std::cout << "HIGH";
+        break;
+    }
+    std::cout << std::endl;
+    std::cout << "*** OPENGL DEBUG CALLBACK: END ***" << std::endl;
+}
+

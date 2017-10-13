@@ -15,7 +15,15 @@ public:
     void addAttribute(const std::string &attributeName);
     void use();
     void unUse();
-    GLuint getUniformLocation(const std::string &uniformName);
+    GLint getUniformLocation(const std::string &uniformName);
+
+    static void openglCallbackFunction(GLenum source,
+        GLenum type,
+        GLuint id,
+        GLenum severity,
+        GLsizei length,
+        const GLchar* message,
+        const void* userParam);
 
 private:
     int _numAttributes;
