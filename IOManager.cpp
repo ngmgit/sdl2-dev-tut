@@ -1,7 +1,7 @@
 #include "IOManager.h"
 #include <fstream>
 
-static bool IOManager::readFileToBuffer(std::string filePath, std::vector<char> &buffer)
+bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char> &buffer)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -19,8 +19,8 @@ static bool IOManager::readFileToBuffer(std::string filePath, std::vector<char> 
     file.seekg(0, std::ios::beg);
 
     // exclude file header info: Not necessary, just to be safe
-    fileSize -= fileSize.tellg();
+    fileSize -= file.tellg();
 
     buffer.resize(fileSize);
-    file.read(&(buffer[0]), fileSize);
+    file.read((char *)&(buffer[0]), fileSize);
 }
