@@ -26,7 +26,7 @@ int decodePNG(
     unsigned long& image_height, 
     const unsigned char* in_png, 
     size_t in_size, 
-    bool convert_to_rgba32 = true)
+    bool convert_to_rgba32)
 {
   // picoPNG version 20101224
   // Copyright (c) 2005-2010 Lode Vandevenne

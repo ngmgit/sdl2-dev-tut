@@ -2,6 +2,7 @@
 #define IOMANAGER_H
 
 #include <vector>
+#include <string>
 
 class IOManager {
 public:

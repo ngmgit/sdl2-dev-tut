@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "MainGame.h"
+#include "ImageLoader.h"
 
 MainGame::MainGame()
     : _window(nullptr),
@@ -23,6 +24,9 @@ void MainGame::run()
 
     // TODO: not be done in this way
     _sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
+
+    // get texture
+    _playerTexture = ImageLoader::loadPNG("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
 
     gameLoop();
 }
@@ -80,6 +84,7 @@ void MainGame::initShaders()
                                  "shaders/colorShading.frag");
     _colorProgram.addAttribute("vertexPosition");
     _colorProgram.addAttribute("vertexColor");
+    _colorProgram.addAttribute("vertexUV");
     _colorProgram.linkShaders();
 }
 
@@ -111,6 +116,11 @@ void MainGame::drawGame()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     _colorProgram.use();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+    GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
+    glUniform1i(textureLocation, 0);
 
     GLint timelocation = _colorProgram.getUniformLocation("time");
     glUniform1f(timelocation, _time);

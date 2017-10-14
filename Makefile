@@ -1,4 +1,4 @@
-OBJS = main.cpp MainGame.cpp Sprite.cpp Errors.cpp GLSLProgram.cpp
+OBJS = main.cpp MainGame.cpp Sprite.cpp Errors.cpp GLSLProgram.cpp ImageLoader.cpp IOManager.cpp picoPNG.cpp
 SDL_LINK_FLAG = -lSDL2
 GLEW_LINK_FLAG = -lGLEW -lGLU -lGL
 

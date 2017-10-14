@@ -23,4 +23,6 @@ bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char
 
     buffer.resize(fileSize);
     file.read((char *)&(buffer[0]), fileSize);
+
+    return true;
 }
