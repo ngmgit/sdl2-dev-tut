@@ -22,11 +22,20 @@ void MainGame::run()
 {
     initSystems();
 
-    // TODO: not be done in this way
-    _sprite.init(-1.0f, -1.0f, 2.0f, 2.0f);
+    // using sprite pointers
+    _sprites.push_back(new Sprite());
+    _sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
+
+    _sprites.push_back(new Sprite());
+    _sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
+
+    for (int i=0; i < 1000; i++) {
+        _sprites.push_back(new Sprite());
+        _sprites.back()->init(-1.0f, 0.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
+    }
 
     // get texture
-    _playerTexture = ImageLoader::loadPNG("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
+    //_playerTexture = ImageLoader::loadPNG("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
 
     gameLoop();
 }
@@ -105,7 +114,8 @@ void MainGame::processInput()
         switch (evnt.type) {
             case SDL_QUIT: _gameState = GameState::EXIT; break;
             case SDL_MOUSEMOTION:
-                std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+                //std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+                break;
         }
     }
 }
@@ -118,14 +128,15 @@ void MainGame::drawGame()
     _colorProgram.use();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
     GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
     glUniform1i(textureLocation, 0);
 
     GLint timelocation = _colorProgram.getUniformLocation("time");
     glUniform1f(timelocation, _time);
 
-    _sprite.draw();
+    for (unsigned int i = 0; i < _sprites.size(); i++) {
+        _sprites[i]->draw();
+    }
 
     _colorProgram.unUse();
 

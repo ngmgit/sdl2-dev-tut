@@ -192,4 +192,3 @@ void GLSLProgram::openglCallbackFunction(
     std::cout << std::endl;
     std::cout << "*** OPENGL DEBUG CALLBACK: END ***" << std::endl;
 }
-
