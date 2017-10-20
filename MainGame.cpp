@@ -8,7 +8,8 @@ MainGame::MainGame()
       _screenWidth(1024),
       _screenHeight(768),
       _gameState(GameState::PLAY),
-      _time(0)
+      _time(0),
+      _maxFPS(60.0f)
 {
 }
 
@@ -45,6 +46,8 @@ void MainGame::initSystems()
     // Intiliaize every sdl module
     SDL_Init(SDL_INIT_EVERYTHING);
 
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
     _window = SDL_CreateWindow("Graphics Engine", SDL_WINDOWPOS_CENTERED,
                                SDL_WINDOWPOS_CENTERED, _screenWidth,
                                _screenHeight, SDL_WINDOW_OPENGL);
@@ -64,9 +67,10 @@ void MainGame::initSystems()
 
     initDebugCallback();
 
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
     glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
+    // Disable Vsync
+    SDL_GL_SetSwapInterval(0);
 
     initShaders();
 }
@@ -100,9 +104,27 @@ void MainGame::initShaders()
 void MainGame::gameLoop()
 {
     while (_gameState != GameState::EXIT) {
+        // User for frame time measuring
+        float startTicks = SDL_GetTicks();
+
         processInput();
         _time += 0.01;
         drawGame();
+        calculateFPS();
+
+        static int frameCounter = 0;
+        frameCounter++;
+        if (frameCounter == 10) {
+            std::cout << _fps << std::endl;
+            frameCounter = 0;
+        }
+
+        float frameTicks = SDL_GetTicks() - startTicks;
+        // Limit fps to max FPS
+        if (1000.0f / _maxFPS > frameTicks) {
+           SDL_Delay(1000.0f / _maxFPS - frameTicks);
+        }
+
     }
 }
 
@@ -129,6 +151,7 @@ void MainGame::drawGame()
 
     glActiveTexture(GL_TEXTURE0);
     GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
+    // here second param '0' is the texture id, 0 as seen above
     glUniform1i(textureLocation, 0);
 
     GLint timelocation = _colorProgram.getUniformLocation("time");
@@ -141,4 +164,44 @@ void MainGame::drawGame()
     _colorProgram.unUse();
 
     SDL_GL_SwapWindow(_window);
+}
+
+void MainGame::calculateFPS()
+{
+    static const int NUM_SAMPLES = 10;
+    static float frameTimes[NUM_SAMPLES];
+    static int currentFrame = 0;
+
+    static float prevTicks = SDL_GetTicks();
+
+    float currentTicks;
+    currentTicks = SDL_GetTicks();
+
+    _frameTime = currentTicks - prevTicks;
+    frameTimes[currentFrame % NUM_SAMPLES] = _frameTime;
+
+    prevTicks = currentTicks;
+
+    int count;
+
+    currentFrame++;
+    if (currentFrame < NUM_SAMPLES) {
+        count = currentFrame;
+    } else {
+        count = NUM_SAMPLES;
+    }
+
+    float frameTimeAverage = 0;
+    for (int i = 0; i < count ; i++) {
+        frameTimeAverage += frameTimes[i];
+    }
+
+    frameTimeAverage /= count;
+
+    if (frameTimeAverage > 0) {
+        _fps = 1000.0f / frameTimeAverage;
+    }
+    else {
+        _fps = 60.0f;
+    }
 }

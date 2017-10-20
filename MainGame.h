@@ -26,6 +26,7 @@ private:
     void gameLoop();
     void drawGame();
     void initDebugCallback();
+    void calculateFPS();
 
     SDL_Window *_window;
     int _screenWidth;
@@ -37,6 +38,9 @@ private:
     GLTexture _playerTexture;
 
     float _time;
+    float _fps;
+    float _frameTime;
+    float _maxFPS;
 };
 
 #endif

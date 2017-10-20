@@ -2,6 +2,7 @@
 #include "IOManager.h"
 #include "picoPNG.h"
 #include "Errors.h"
+#include <string>
 
 GLTexture ImageLoader::loadPNG(std::string filePath)
 {
@@ -14,11 +15,11 @@ GLTexture ImageLoader::loadPNG(std::string filePath)
     if (IOManager::readFileToBuffer(filePath, in) == false) {
         fatalError("Failed to read the png file to buffer!");
     }
-    
+
     int errorCode = decodePNG(out, width, height, &in[0], in.size());
 
     if (errorCode != 0) {
-        fatalError("decodePNG failed with error: " + errorCode);
+        fatalError("decodePNG failed with error: " + std::to_string(errorCode));
     }
 
     glGenTextures(1, &(texture.id));
