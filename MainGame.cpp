@@ -35,9 +35,6 @@ void MainGame::run()
         _sprites.back()->init(-1.0f, 0.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
     }
 
-    // get texture
-    //_playerTexture = ImageLoader::loadPNG("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
-
     gameLoop();
 }
 
@@ -65,11 +62,14 @@ void MainGame::initSystems()
         fatalError("Could not initialize GLEW!");
     }
 
+    // Print OpenGL version
+    std::printf("***    OpenGL Version: %s  ***\n", glGetString(GL_VERSION));
+
     initDebugCallback();
 
     glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-    // Disable Vsync
+    // Set Vsync
     SDL_GL_SetSwapInterval(0);
 
     initShaders();

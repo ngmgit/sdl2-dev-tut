@@ -40,3 +40,14 @@ sdl2-dev-tut.kdev4
 # Task Runner
 !.vscode/tasks.json
 !.vscode/launch.json
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
