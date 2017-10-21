@@ -5,9 +5,9 @@
 #include <GL/glew.h>
 #include <vector>
 
-#include "GLSLProgram.h"
-#include "Sprite.h"
-#include "Errors.h"
+#include <Myengine/GLSLProgram.h>
+#include <Myengine/Sprite.h>
+#include <Myengine/Errors.h>
 
 enum class GameState { PLAY, EXIT };
 

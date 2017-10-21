@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "MainGame.h"
-#include "ImageLoader.h"
+#include <Myengine/ImageLoader.h>
 
 MainGame::MainGame()
     : _window(nullptr),
