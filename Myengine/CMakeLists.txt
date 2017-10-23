@@ -2,6 +2,7 @@
 set(myengine_source_files
         Myengine.cpp
         Window.cpp
+        Camera2D.cpp
         Sprite.cpp
         Errors.cpp
         GLSLProgram.cpp
@@ -13,4 +14,3 @@ set(myengine_source_files
     )
 
 add_library(myengine SHARED ${myengine_source_files})
-target_link_libraries(myengine ${SDL_LINK_FLAGS} ${GLEW_LINK_FLAGS})

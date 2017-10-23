@@ -8,6 +8,7 @@
 #include "Myengine/Sprite.h"
 #include "Myengine/Errors.h"
 #include "Myengine/Window.h"
+#include "Myengine/Camera2D.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -34,6 +35,7 @@ private:
 
     std::vector<Myengine::Sprite*> _sprites;
     Myengine::GLSLProgram _colorProgram;
+    Myengine::Camera2D _camera;
 
     float _time;
     float _fps;
