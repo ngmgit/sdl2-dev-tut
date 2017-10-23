@@ -1,6 +1,8 @@
 #include "IOManager.h"
 #include <fstream>
 
+namespace Myengine {
+
 bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char> &buffer)
 {
     std::ifstream file(filePath, std::ios::binary);
@@ -25,4 +27,6 @@ bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char
     file.read((char *)&(buffer[0]), fileSize);
 
     return true;
+}
+
 }

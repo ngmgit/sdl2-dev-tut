@@ -1,5 +1,7 @@
 
 set(myengine_source_files
+        Myengine.cpp
+        Window.cpp
         Sprite.cpp
         Errors.cpp
         GLSLProgram.cpp

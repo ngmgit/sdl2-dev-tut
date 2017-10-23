@@ -5,6 +5,8 @@
 #include <map>
 #include "GLTexture.h"
 
+namespace Myengine {
+
 class TextureCache {
 public:
     TextureCache();
@@ -15,5 +17,7 @@ public:
 private:
     std::map<std::string, GLTexture> _textureMap;
 };
+
+}
 
 #endif

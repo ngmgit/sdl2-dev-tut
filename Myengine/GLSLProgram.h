@@ -4,6 +4,8 @@
 #include <string>
 #include <GL/glew.h>
 
+namespace Myengine {
+
 class GLSLProgram {
 public:
     GLSLProgram();
@@ -34,5 +36,7 @@ private:
 
     void compileShader(const std::string &filePath, GLuint id);
 };
+
+}
 
 #endif

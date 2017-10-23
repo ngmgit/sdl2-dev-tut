@@ -1,11 +1,12 @@
 #include <iostream>
+#include <GL/glew.h>
 
 #include "MainGame.h"
-#include <Myengine/ImageLoader.h>
+#include "Myengine/Myengine.h"
+#include "Myengine/ImageLoader.h"
 
 MainGame::MainGame()
-    : _window(nullptr),
-      _screenWidth(1024),
+    : _screenWidth(1024),
       _screenHeight(768),
       _gameState(GameState::PLAY),
       _time(0),
@@ -15,8 +16,6 @@ MainGame::MainGame()
 
 MainGame::~MainGame()
 {
-    SDL_DestroyWindow(_window);
-    _window = NULL;
 }
 
 void MainGame::run()
@@ -24,14 +23,14 @@ void MainGame::run()
     initSystems();
 
     // using sprite pointers
-    _sprites.push_back(new Sprite());
+    _sprites.push_back(new Myengine::Sprite());
     _sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
 
-    _sprites.push_back(new Sprite());
+    _sprites.push_back(new Myengine::Sprite());
     _sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
 
     for (int i=0; i < 1000; i++) {
-        _sprites.push_back(new Sprite());
+        _sprites.push_back(new Myengine::Sprite());
         _sprites.back()->init(-1.0f, 0.0f, 1.0f, 1.0f, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
     }
 
@@ -40,55 +39,11 @@ void MainGame::run()
 
 void MainGame::initSystems()
 {
-    // Intiliaize every sdl module
-    SDL_Init(SDL_INIT_EVERYTHING);
+    Myengine::init();
 
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-    _window = SDL_CreateWindow("Graphics Engine", SDL_WINDOWPOS_CENTERED,
-                               SDL_WINDOWPOS_CENTERED, _screenWidth,
-                               _screenHeight, SDL_WINDOW_OPENGL);
-    if (_window == nullptr) {
-        fatalError("SDL window could not be created");
-    }
-
-    SDL_GLContext glContext = SDL_GL_CreateContext(_window);
-    if (glContext == nullptr) {
-        fatalError("SDL_GL context could not be created!");
-    }
-
-    GLenum error = glewInit();
-    if (error != GLEW_OK) {
-        fatalError("Could not initialize GLEW!");
-    }
-
-    // Print OpenGL version
-    std::printf("***    OpenGL Version: %s  ***\n", glGetString(GL_VERSION));
-
-    initDebugCallback();
-
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-
-    // Set Vsync
-    SDL_GL_SetSwapInterval(0);
+    _window.createWindow("Game Engine", _screenWidth, _screenHeight, 0);
 
     initShaders();
-}
-
-void MainGame::initDebugCallback() {
-    std::cout << "GL Debug Enabled!" << std::endl;
-    glEnable(GL_DEBUG_OUTPUT);
-
-    std::cout << "Register OpenGL debug callback " << std::endl;
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback(GLSLProgram::openglCallbackFunction, nullptr);
-    GLuint unusedIds = 0;
-    glDebugMessageControl(GL_DONT_CARE,
-        GL_DONT_CARE,
-        GL_DONT_CARE,
-        0,
-        &unusedIds,
-        true);
 }
 
 void MainGame::initShaders()
@@ -163,7 +118,7 @@ void MainGame::drawGame()
 
     _colorProgram.unUse();
 
-    SDL_GL_SwapWindow(_window);
+    _window.swapBuffer();
 }
 
 void MainGame::calculateFPS()

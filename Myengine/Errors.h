@@ -3,6 +3,10 @@
 
 #include <string>
 
+namespace Myengine {
+
 void fatalError(const std::string &errorString);
+
+}
 
 #endif

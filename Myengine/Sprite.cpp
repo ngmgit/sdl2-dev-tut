@@ -4,6 +4,8 @@
 
 #include <cstddef>
 
+namespace Myengine {
+
 Sprite::Sprite() : _x(0.0f), _y(0.0f), _width(0.0f), _height(0.0f), _vboID(0) {}
 
 Sprite::~Sprite()
@@ -56,7 +58,7 @@ void Sprite::init(float x, float y, float width, float height, std::string textu
 
     glBindBuffer(GL_ARRAY_BUFFER, _vboID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData,
-                 GL_STATIC_DRAW);
+                GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -78,4 +80,6 @@ void Sprite::draw() const
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 }

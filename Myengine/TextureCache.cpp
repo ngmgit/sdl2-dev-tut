@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+namespace Myengine {
+
 TextureCache::TextureCache()
 {
 }
@@ -32,3 +34,4 @@ GLTexture TextureCache::getTexture(std::string texturePath)
     return mit->second;
 }
 
+}

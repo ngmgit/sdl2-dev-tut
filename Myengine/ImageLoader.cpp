@@ -4,6 +4,8 @@
 #include "Errors.h"
 #include <string>
 
+namespace Myengine {
+
 GLTexture ImageLoader::loadPNG(std::string filePath)
 {
     GLTexture texture = {};
@@ -41,4 +43,6 @@ GLTexture ImageLoader::loadPNG(std::string filePath)
     texture.height = height;
 
     return texture;
+}
+
 }

@@ -2,12 +2,12 @@
 #define MAINGAME_H
 
 #include <SDL2/SDL.h>
-#include <GL/glew.h>
 #include <vector>
 
-#include <Myengine/GLSLProgram.h>
-#include <Myengine/Sprite.h>
-#include <Myengine/Errors.h>
+#include "Myengine/GLSLProgram.h"
+#include "Myengine/Sprite.h"
+#include "Myengine/Errors.h"
+#include "Myengine/Window.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -27,13 +27,13 @@ private:
     void initDebugCallback();
     void calculateFPS();
 
-    SDL_Window *_window;
+    Myengine::Window _window;
     int _screenWidth;
     int _screenHeight;
     GameState _gameState;
 
-    std::vector<Sprite*> _sprites;
-    GLSLProgram _colorProgram;
+    std::vector<Myengine::Sprite*> _sprites;
+    Myengine::GLSLProgram _colorProgram;
 
     float _time;
     float _fps;

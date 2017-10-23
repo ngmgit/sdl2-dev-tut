@@ -5,13 +5,15 @@
 #include "GLSLProgram.h"
 #include "Errors.h"
 
+namespace Myengine {
+
 GLSLProgram::GLSLProgram()
     : _numAttributes(0), _programID(0), _vertexShaderID(0), _fragmentShaderID(0)
 {
 }
 
 void GLSLProgram::compileShaders(const std::string &vertexShaderPath,
-                                 const std::string &fragmentShaderPath)
+                                const std::string &fragmentShaderPath)
 {
     _programID = glCreateProgram();
 
@@ -191,4 +193,6 @@ void GLSLProgram::openglCallbackFunction(
     }
     std::cout << std::endl;
     std::cout << "*** OPENGL DEBUG CALLBACK: END ***" << std::endl;
+}
+
 }

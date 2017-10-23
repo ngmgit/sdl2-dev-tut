@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4)
 
 project (sdl2-dev-tut)
+set (CMAKE_CXX_STANDARD 17)
 
 set(source_files
         MainGame.cpp
@@ -22,14 +23,14 @@ add_subdirectory(Myengine)
 
 
 # *** set library constants ***
-SET(MY_LIBS_LINK_FLAGS "myengine")
-SET(SDL_LINK_FLAGS "-lSDL2")
-SET(GLEW_LINK_FLAGS "-lGLEW -lGLU -lGL")
+set(MY_LIBS_LINK_FLAGS "myengine")
+set(SDL_LINK_FLAGS "-lSDL2")
+set(GLEW_LINK_FLAGS "-lGLEW -lGLU -lGL")
 
 
 # *** set compile and link flag ***
-SET(COMPILER_FLAGS "-g -std=c++17 -Wall" )
-SET(LINKER_FLAGS "${MY_LIBS_LINK_FLAGS} ${SDL_LINK_FLAGS} ${GLEW_LINK_FLAGS}")
+set(COMPILER_FLAGS "-Wall")
+set(LINKER_FLAGS "${SDL_LINK_FLAGS} ${GLEW_LINK_FLAGS}")
 
 
 # *** add the executable ***

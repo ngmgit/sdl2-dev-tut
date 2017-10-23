@@ -5,6 +5,8 @@
 #include <string>
 #include "GLTexture.h"
 
+namespace Myengine {
+
 class Sprite {
 public:
     Sprite();
@@ -21,5 +23,7 @@ private:
     GLuint _vboID;
     GLTexture _texture;
 };
+
+}
 
 #endif

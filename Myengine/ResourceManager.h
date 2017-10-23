@@ -4,6 +4,8 @@
 #include "TextureCache.h"
 #include <string>
 
+namespace Myengine {
+
 class ResourceManager
 {
 public:
@@ -14,5 +16,7 @@ private:
     static TextureCache _textureCache;
 
 };
+
+}
 
 #endif
