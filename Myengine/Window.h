@@ -15,8 +15,8 @@ public:
     ~Window();
 
     int createWindow(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags);
-    int getScreenWidth() { _screenHeight; }
-    int getScreenHeight() { _screenHeight; }
+    int getScreenWidth() { return _screenWidth; }
+    int getScreenHeight() { return _screenHeight; }
     void initDebugCallback();
     void swapBuffer();
 

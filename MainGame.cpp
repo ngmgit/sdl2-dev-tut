@@ -4,6 +4,8 @@
 #include "MainGame.h"
 #include "Myengine/Myengine.h"
 #include "Myengine/ImageLoader.h"
+#include "Myengine/ResourceManager.h"
+#include "Myengine/GLTexture.h"
 
 MainGame::MainGame()
     : _screenWidth(1024),
@@ -23,13 +25,6 @@ void MainGame::run()
 {
     initSystems();
 
-    // using sprite pointers
-    _sprites.push_back(new Myengine::Sprite());
-    _sprites.back()->init(0.0f, 0.0f, _screenWidth / 2 , _screenWidth / 2, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
-
-    _sprites.push_back(new Myengine::Sprite());
-    _sprites.back()->init(_screenWidth / 2 , 0.0f, _screenWidth / 2 , _screenWidth / 2, "textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
-
     gameLoop();
 }
 
@@ -40,6 +35,8 @@ void MainGame::initSystems()
     _window.createWindow("Game Engine", _screenWidth, _screenHeight, 0);
 
     initShaders();
+
+    _spriteBatch.init();
 }
 
 void MainGame::initShaders()
@@ -104,16 +101,19 @@ void MainGame::processInput()
                         _camera.setPosition(_camera.getPosition() + glm::vec2(0.0, CAMERA_SPEED));
                         break;
                     case SDLK_a:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0));
+                        _camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0));
                         break;
                     case SDLK_d:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0));
+                        _camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0));
                         break;
                     case SDLK_q:
                         _camera.setScale(_camera.getScale() + SCALE_SPEED);
                         break;
                     case SDLK_e:
                         _camera.setScale(_camera.getScale() - SCALE_SPEED);
+                        break;
+                    case SDLK_ESCAPE:
+                        _gameState = GameState::EXIT; break;
                         break;
                 }
         }
@@ -127,11 +127,13 @@ void MainGame::drawGame()
 
     _colorProgram.use();
 
+    // set texture along with its uniform variable
     glActiveTexture(GL_TEXTURE0);
     GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
     // here second param '0' is the texture id, 0 as seen above
     glUniform1i(textureLocation, 0);
 
+    // set time uniform variable
     GLint timelocation = _colorProgram.getUniformLocation("time");
     glUniform1f(timelocation, _time);
 
@@ -140,9 +142,28 @@ void MainGame::drawGame()
     glm::mat4 cameraMatrix = _camera.getCameraMatrix();
     glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
-    for (unsigned int i = 0; i < _sprites.size(); i++) {
-        _sprites[i]->draw();
+    // sprite batch setup
+    _spriteBatch.begin();
+
+    glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
+    glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
+    static Myengine::GLTexture texture = Myengine::ResourceManager::getTexture("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
+    Myengine::Color color;
+    color.r = 255;
+    color.g = 255;
+    color.b = 255;
+    color.a = 255;
+
+    for (int i = 0; i < 1000; i++) {
+        _spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
+        _spriteBatch.draw(pos + glm::vec4(50, 0, 0, 0), uv, texture.id, 0.0f, color);
     }
+
+    _spriteBatch.end();
+
+    _spriteBatch.renderBatch();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     _colorProgram.unUse();
 

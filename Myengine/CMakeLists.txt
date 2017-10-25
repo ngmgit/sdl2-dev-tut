@@ -3,6 +3,7 @@ set(myengine_source_files
         Myengine.cpp
         Window.cpp
         Camera2D.cpp
+        SpriteBatch.cpp
         Sprite.cpp
         Errors.cpp
         GLSLProgram.cpp

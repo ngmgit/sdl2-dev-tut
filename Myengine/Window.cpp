@@ -16,6 +16,9 @@ Window::~Window()
 
 int Window::createWindow(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags)
 {
+    _screenWidth = screenWidth;
+    _screenHeight = screenHeight;
+
     Uint32 flags = SDL_WINDOW_OPENGL;
 
     if (currentFlags & INVISIBLE) {
