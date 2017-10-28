@@ -9,6 +9,8 @@
 #include "Myengine/Window.h"
 #include "Myengine/Camera2D.h"
 #include "Myengine/SpriteBatch.h"
+#include "Myengine/InputManger.h"
+#include "Myengine/Timer.h"
 
 enum class GameState { PLAY, EXIT };
 
@@ -26,7 +28,6 @@ private:
     void gameLoop();
     void drawGame();
     void initDebugCallback();
-    void calculateFPS();
 
     Myengine::Window _window;
     int _screenWidth;
@@ -36,10 +37,11 @@ private:
     Myengine::GLSLProgram _colorProgram;
     Myengine::Camera2D _camera;
     Myengine::SpriteBatch _spriteBatch;
+    Myengine::InputManger _inputManger;
+    Myengine::FpsLimiter _fpsLimiter;
 
     float _time;
     float _fps;
-    float _frameTime;
     float _maxFPS;
 };
 

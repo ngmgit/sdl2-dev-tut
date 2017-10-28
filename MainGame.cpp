@@ -37,6 +37,7 @@ void MainGame::initSystems()
     initShaders();
 
     _spriteBatch.init();
+    _fpsLimiter.init(_maxFPS);
 }
 
 void MainGame::initShaders()
@@ -52,8 +53,8 @@ void MainGame::initShaders()
 void MainGame::gameLoop()
 {
     while (_gameState != GameState::EXIT) {
-        // User for frame time measuring
-        float startTicks = SDL_GetTicks();
+
+        _fpsLimiter.begin();
 
         processInput();
         _time += 0.01;
@@ -61,7 +62,8 @@ void MainGame::gameLoop()
         _camera.update();
 
         drawGame();
-        calculateFPS();
+
+        _fps = _fpsLimiter.end();
 
         static int frameCounter = 0;
         frameCounter++;
@@ -69,13 +71,6 @@ void MainGame::gameLoop()
             std::cout << _fps << std::endl;
             frameCounter = 0;
         }
-
-        float frameTicks = SDL_GetTicks() - startTicks;
-        // Limit fps to max FPS
-        if (1000.0f / _maxFPS > frameTicks) {
-           SDL_Delay(1000.0f / _maxFPS - frameTicks);
-        }
-
     }
 }
 
@@ -83,41 +78,54 @@ void MainGame::processInput()
 {
     SDL_Event evnt;
 
-    const float CAMERA_SPEED = 20.0f;
+    const float CAMERA_SPEED = 3.0f;
     const float SCALE_SPEED = 0.1f;
 
     while (SDL_PollEvent(&evnt)) {
         switch (evnt.type) {
-            case SDL_QUIT: _gameState = GameState::EXIT; break;
+            case SDL_QUIT:
+                _gameState = GameState::EXIT;
+                break;
             case SDL_MOUSEMOTION:
                 //std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
                 break;
             case SDL_KEYDOWN:
-                switch (evnt.key.keysym.sym) {
-                    case SDLK_w:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(0.0, -CAMERA_SPEED));
-                        break;
-                    case SDLK_s:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(0.0, CAMERA_SPEED));
-                        break;
-                    case SDLK_a:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0));
-                        break;
-                    case SDLK_d:
-                        _camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0));
-                        break;
-                    case SDLK_q:
-                        _camera.setScale(_camera.getScale() + SCALE_SPEED);
-                        break;
-                    case SDLK_e:
-                        _camera.setScale(_camera.getScale() - SCALE_SPEED);
-                        break;
-                    case SDLK_ESCAPE:
-                        _gameState = GameState::EXIT; break;
-                        break;
-                }
+                _inputManger.pressKey(evnt.key.keysym.sym);
+                break;
+            case SDL_KEYUP:
+                _inputManger.releaseKey(evnt.key.keysym.sym);
+                break;
         }
     }
+
+    if (_inputManger.isKeyPressed(SDLK_w)) {
+        _camera.setPosition(_camera.getPosition() + glm::vec2(0.0, CAMERA_SPEED));
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_s)) {
+        _camera.setPosition(_camera.getPosition() + glm::vec2(0.0, -CAMERA_SPEED));
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_a)) {
+        _camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0));
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_d)) {
+        _camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0));
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_q)) {
+        _camera.setScale(_camera.getScale() + SCALE_SPEED);
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_e)) {
+        _camera.setScale(_camera.getScale() - SCALE_SPEED);
+    }
+
+    if (_inputManger.isKeyPressed(SDLK_ESCAPE)) {
+        _gameState = GameState::EXIT;
+    }
+
 }
 
 void MainGame::drawGame()
@@ -142,9 +150,7 @@ void MainGame::drawGame()
     glm::mat4 cameraMatrix = _camera.getCameraMatrix();
     glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
-    // sprite batch setup
-    _spriteBatch.begin();
-
+    // set color, tecture, uv and its position
     glm::vec4 pos(0.0f, 0.0f, 50.0f, 50.0f);
     glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
     static Myengine::GLTexture texture = Myengine::ResourceManager::getTexture("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
@@ -154,10 +160,11 @@ void MainGame::drawGame()
     color.b = 255;
     color.a = 255;
 
-    for (int i = 0; i < 1000; i++) {
-        _spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
-        _spriteBatch.draw(pos + glm::vec4(50, 0, 0, 0), uv, texture.id, 0.0f, color);
-    }
+    // sprite batch setup
+    _spriteBatch.begin();
+
+    _spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
+    _spriteBatch.draw(pos + glm::vec4(50, 0, 0, 0), uv, texture.id, 0.0f, color);
 
     _spriteBatch.end();
 
@@ -168,44 +175,4 @@ void MainGame::drawGame()
     _colorProgram.unUse();
 
     _window.swapBuffer();
-}
-
-void MainGame::calculateFPS()
-{
-    static const int NUM_SAMPLES = 10;
-    static float frameTimes[NUM_SAMPLES];
-    static int currentFrame = 0;
-
-    static float prevTicks = SDL_GetTicks();
-
-    float currentTicks;
-    currentTicks = SDL_GetTicks();
-
-    _frameTime = currentTicks - prevTicks;
-    frameTimes[currentFrame % NUM_SAMPLES] = _frameTime;
-
-    prevTicks = currentTicks;
-
-    int count;
-
-    currentFrame++;
-    if (currentFrame < NUM_SAMPLES) {
-        count = currentFrame;
-    } else {
-        count = NUM_SAMPLES;
-    }
-
-    float frameTimeAverage = 0;
-    for (int i = 0; i < count ; i++) {
-        frameTimeAverage += frameTimes[i];
-    }
-
-    frameTimeAverage /= count;
-
-    if (frameTimeAverage > 0) {
-        _fps = 1000.0f / frameTimeAverage;
-    }
-    else {
-        _fps = 60.0f;
-    }
 }

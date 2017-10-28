@@ -12,6 +12,8 @@ set(myengine_source_files
         picoPNG.cpp
         TextureCache.cpp
         ResourceManager.cpp
+        InputManger.cpp
+        Timer.cpp
     )
 
 add_library(myengine SHARED ${myengine_source_files})
