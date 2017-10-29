@@ -141,10 +141,6 @@ void MainGame::drawGame()
     // here second param '0' is the texture id, 0 as seen above
     glUniform1i(textureLocation, 0);
 
-    // set time uniform variable
-    GLint timelocation = _colorProgram.getUniformLocation("time");
-    glUniform1f(timelocation, _time);
-
     // set the camera matrix
     GLint pLocation = _colorProgram.getUniformLocation("P");
     glm::mat4 cameraMatrix = _camera.getCameraMatrix();
