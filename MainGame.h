@@ -12,6 +12,8 @@
 #include "Myengine/InputManger.h"
 #include "Myengine/Timer.h"
 
+#include "Bullet.h"
+
 enum class GameState { PLAY, EXIT };
 
 class MainGame {
@@ -39,6 +41,7 @@ private:
     Myengine::SpriteBatch _spriteBatch;
     Myengine::InputManger _inputManger;
     Myengine::FpsLimiter _fpsLimiter;
+    std::vector<Bullet> _bullets;
 
     float _time;
     float _fps;

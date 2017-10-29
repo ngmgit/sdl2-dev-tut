@@ -37,6 +37,7 @@ void MainGame::initSystems()
     initShaders();
 
     _spriteBatch.init();
+
     _fpsLimiter.init(_maxFPS);
 }
 
@@ -60,6 +61,15 @@ void MainGame::gameLoop()
         _time += 0.01;
 
         _camera.update();
+
+        for (int i = 0; i < _bullets.size();) {
+            if(_bullets[i].update() == true) {
+                _bullets[i] = _bullets.back();
+                _bullets.pop_back();
+            } else {
+                i++;
+            }
+        }
 
         drawGame();
 
@@ -135,7 +145,12 @@ void MainGame::processInput()
     if (_inputManger.isKeyPressed(SDL_BUTTON_LEFT)) {
         glm::vec2 mouseCoords = _inputManger.getMouseCoords();
         mouseCoords = _camera.convertScreenToWorld(mouseCoords);
-        std::cout << mouseCoords.x << " " << mouseCoords.y << std::endl;
+
+        glm::vec2 playerPosition(0.0f);
+        glm::vec2 direction = mouseCoords - playerPosition;
+        direction = glm::normalize(direction);
+
+        _bullets.emplace_back(playerPosition, direction, 5.01f, 1000);
     }
 
 }
@@ -172,6 +187,10 @@ void MainGame::drawGame()
     _spriteBatch.begin();
 
     _spriteBatch.draw(pos, uv, texture.id, 0.0f, color);
+
+    for (int i = 0; i < _bullets.size(); i++) {
+        _bullets[i].draw(_spriteBatch);
+    }
 
     _spriteBatch.end();
 

@@ -5,6 +5,7 @@ set (CMAKE_CXX_STANDARD 17)
 
 set(source_files
         MainGame.cpp
+        Bullet.cpp
     )
 
 set(output_name "game.app")
