@@ -37,4 +37,15 @@ void Camera2D::update()
     }
 }
 
+glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords)
+{
+    // Make it so that 0 is the center
+    screenCoords -= glm::vec2(_screenWidth/2, _screenHeight/2);
+    // scale coordinates
+    screenCoords /= _scale;
+    // Translate with cmaera position
+    screenCoords += _position;
+    return screenCoords;
+}
+
 }
