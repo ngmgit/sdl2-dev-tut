@@ -35,31 +35,31 @@ import ycm_core
 
 GCC_VERSION = '7.2.0'
 
-# Usual include paths
+#Usual include paths
 SYSTEM_INCLUDES = [
-    '/usr/include',
-    '/usr/include/c++/{}'.format(GCC_VERSION)
+    '/usr/include/c++/7.2.0',
+    '/usr/include/c++/7.2.0/x86_64-pc-linux-gnu',
+    '/usr/include/c++/7.2.0/backward',
+    '/usr/local/include',
+    '/usr/lib/clang/5.0.0/include',
+    '/usr/include'
 ]
 
 INCLUDES = [
-    '/usr/include/SDL2',
-    '/usr/include/GL'
+    '-I/home/nishanth/Work/game-dev/sdl2-dev-tut'
 ]
 
 flags = [
     '-x',
     'c++',
     '-Dmyengine_EXPORTS',
-    '-I/home/nishanth/Work/game-dev/sdl2-dev-tut',
-    '-std=gnu++1z',
+    '-std=gnu++1z'
 ]
 
-for i in SYSTEM_INCLUDES:
-    flags.append('-isystem')
-    flags.append(i)
 
 for include_dir in INCLUDES:
     flags.append('-I' + include_dir)
+
 
 # Set this to the absolute path to the folder (NOT the file!) containing the
 # compile_commands.json file to use that instead of 'flags'. See here for
@@ -74,48 +74,48 @@ for include_dir in INCLUDES:
 compilation_database_folder = '.'
 
 if os.path.exists( compilation_database_folder ):
-  database = ycm_core.CompilationDatabase( compilation_database_folder )
+    database = ycm_core.CompilationDatabase( compilation_database_folder )
 else:
-  database = None
+    database = None
 
 SOURCE_EXTENSIONS = [ '.C', '.cpp', '.cxx', '.cc', '.c', '.m', '.mm' ]
 
 def DirectoryOfThisScript():
-  return os.path.dirname( os.path.abspath( __file__ ) )
+    return os.path.dirname( os.path.abspath( __file__ ) )
 
 
 def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
-  if not working_directory:
-    return list( flags )
-  new_flags = []
-  make_next_absolute = False
-  path_flags = [ '-isystem', '-I', '-iquote', '--sysroot=' ]
-  for flag in flags:
-    new_flag = flag
+    if not working_directory:
+        return list( flags )
+    new_flags = []
+    make_next_absolute = False
+    path_flags = [ '-isystem', '-I', '-iquote', '--sysroot=' ]
+    for flag in flags:
+        new_flag = flag
 
-    if make_next_absolute:
-      make_next_absolute = False
-      if not flag.startswith( '/' ):
-        new_flag = os.path.join( working_directory, flag )
+        if make_next_absolute:
+            make_next_absolute = False
+            if not flag.startswith( '/' ):
+                new_flag = os.path.join( working_directory, flag )
 
-    for path_flag in path_flags:
-      if flag == path_flag:
-        make_next_absolute = True
-        break
+        for path_flag in path_flags:
+            if flag == path_flag:
+                make_next_absolute = True
+                break
 
-      if flag.startswith( path_flag ):
-        path = flag[ len( path_flag ): ]
-        new_flag = path_flag + os.path.join( working_directory, path )
-        break
+        if flag.startswith( path_flag ):
+            path = flag[ len( path_flag ): ]
+            new_flag = path_flag + os.path.join( working_directory, path )
+            break
 
-    if new_flag:
-      new_flags.append( new_flag )
-  return new_flags
+        if new_flag:
+            new_flags.append( new_flag )
+    return new_flags
 
 
 def IsHeaderFile( filename ):
-  extension = os.path.splitext( filename )[ 1 ]
-  return extension in [ '.H', '.h', '.hxx', '.hpp', '.hh' ]
+    extension = os.path.splitext( filename )[ 1 ]
+    return extension in [ '.H', '.h', '.hxx', '.hpp', '.hh' ]
 
 
 def GetCompilationInfoForFile( filename ):
@@ -151,6 +151,10 @@ def FlagsForFile( filename, **kwargs ):
   else:
     relative_to = DirectoryOfThisScript()
     final_flags = MakeRelativePathsInFlagsAbsolute( flags, relative_to )
+
+  for i in SYSTEM_INCLUDES:
+    final_flags.append('-isystem')
+    final_flags.append(i)
 
   return {
     'flags': final_flags,

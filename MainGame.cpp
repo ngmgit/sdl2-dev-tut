@@ -8,7 +8,6 @@ MainGame::MainGame() :
     _screenWidth(1024),
     _screenHeight(768),
     _gameState(GameState::PLAY)
-
 {
 }
 
