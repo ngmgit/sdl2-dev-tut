@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include <iostream>
-
 #include <Myengine/Errors.h>
 #include <Myengine/ResourceManager.h>
 
@@ -24,6 +23,7 @@ Level::Level(const std::string &fileName)
         _levelData.push_back(tmp);
     }
 
+    _spriteBatch.init();
     _spriteBatch.begin();
 
     glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
@@ -71,11 +71,12 @@ Level::Level(const std::string &fileName)
                     _startPlayerPos.y = y * TILE_WIDTH;
                     break;
                 case 'Z':
-                    _zombieStartPos.emplace_back(x * TILE_WIDTH, y * TILE_WIDTH);
+                    _zombieStartPositions.emplace_back(x * TILE_WIDTH, y * TILE_WIDTH);
                     break;
                 case '.': break;
                 default:
-                    std::cout  << "Unexpected symbol" << tile << ": " + x << y;
+                    std::printf("Unexpected symbol %c at (%d, %d)", tile, x, y);
+                    break;
             }
         }
     }

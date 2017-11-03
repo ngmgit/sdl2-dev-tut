@@ -37,12 +37,11 @@ GCC_VERSION = '7.2.0'
 
 #Usual include paths
 SYSTEM_INCLUDES = [
-    '/usr/include/c++/7.2.0',
-    '/usr/include/c++/7.2.0/x86_64-pc-linux-gnu',
-    '/usr/include/c++/7.2.0/backward',
+    '/usr/include/c++/v1',
     '/usr/local/include',
     '/usr/lib/clang/5.0.0/include',
-    '/usr/include'
+    '/usr/include/SDL2',
+    '/usr/include',
 ]
 
 INCLUDES = [
@@ -53,7 +52,8 @@ flags = [
     '-x',
     'c++',
     '-Dmyengine_EXPORTS',
-    '-std=gnu++1z'
+    '-std=c++17',
+    '-stdlib=libc++'
 ]
 
 

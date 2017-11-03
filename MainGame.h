@@ -3,12 +3,14 @@
 
 #include <vector>
 
-#include "Myengine/Window.h"
-#include "Myengine/GLSLProgram.h"
-#include "Myengine/Camera2D.h"
-#include "Myengine/InputManger.h"
+#include <Myengine/Window.h>
+#include <Myengine/GLSLProgram.h>
+#include <Myengine/Camera2D.h>
+#include <Myengine/InputManger.h>
+#include <Myengine/SpriteBatch.h>
 
 #include "Zombie/Level.h"
+#include "Zombie/Player.h"
 
 enum class GameState {
     PLAY,
@@ -25,8 +27,15 @@ public:
 private:
     // initiaize the core system
     void initSystems();
+
+    // initialze and set level related config
+    void initLevel();
+
     // initialize the shaders
     void initShaders();
+
+    // update
+    void updateAgents();
 
     // Handle the input processing
     void processInput();
@@ -44,8 +53,14 @@ private:
     Myengine::GLSLProgram _textureProgram;
     Myengine::Camera2D    _camera;
     Myengine::InputManger _inputManger;
+    Myengine::SpriteBatch _agentSpriteBatch;
 
     std::vector<Level*> _levels;
+    int _currentLevel;
+
+    Player* _player;
+    //vector of all humans
+    std::vector<Human*> _humans;
 };
 
 #endif

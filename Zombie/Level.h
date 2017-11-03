@@ -16,13 +16,16 @@ public:
 
     void draw();
 
+    // getters
+    glm::vec2 getStartPlayerPos() const { return _startPlayerPos; }
+    const std::vector<glm::vec2>& getZombieStartPositions() const { return _zombieStartPositions; }
 private:
     std::vector<std::string> _levelData;
     int _numHumans;
     Myengine::SpriteBatch _spriteBatch;
 
-    glm::ivec2 _startPlayerPos;
-    std::vector<glm::ivec2> _zombieStartPos;
+    glm::vec2 _startPlayerPos;
+    std::vector<glm::vec2> _zombieStartPositions;
 
 };
 

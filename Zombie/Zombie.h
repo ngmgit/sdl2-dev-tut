@@ -7,6 +7,8 @@ class Zombie : public Agent {
 public:
     Zombie();
     ~Zombie();
+
+    virtual void update();
 };
 
 #endif // ZOMBIE_H

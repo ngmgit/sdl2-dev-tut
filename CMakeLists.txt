@@ -7,6 +7,9 @@ set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(source_files
         MainGame.cpp
         Zombie/Level.cpp
+        Zombie/Agent.cpp
+        Zombie/Human.cpp
+        Zombie/Player.cpp
     )
 
 set(output_name "game.app")
