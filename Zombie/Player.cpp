@@ -22,7 +22,9 @@ void Player::init(float speed, glm::vec2 pos, Myengine::InputManger* inputManger
 
 }
 
-void Player::update()
+void Player::update(const std::vector<std::string> &levelData,
+    std::vector<Human*> &humans,
+    std::vector<Zombie*> &zombies)
 {
     if (_inputManager->isKeyPressed(SDLK_w)) {
         _position.y += _speed;
@@ -35,4 +37,6 @@ void Player::update()
     } else if (_inputManager->isKeyPressed(SDLK_d)) {
         _position.x += _speed;
     }
+
+    collideWithLevel(levelData);
 }
