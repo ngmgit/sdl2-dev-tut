@@ -23,6 +23,14 @@ Level::Level(const std::string &fileName)
         _levelData.push_back(tmp);
     }
 
+    int levelDataSize = _levelData.size();
+    for (int y = 0; y < _levelData.size() / 2; y++) {
+        int tempY = levelDataSize -1 - y;
+        std::string temp = _levelData[y];
+        _levelData[y] = _levelData[tempY];
+        _levelData[tempY] = temp;
+    }
+
     _spriteBatch.init();
     _spriteBatch.begin();
 
