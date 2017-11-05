@@ -46,7 +46,7 @@ void MainGame::initLevel()
     _currentLevel = 0;
 
     _player = new Player();
-    _player->init(1.0f, _levels[_currentLevel]->getStartPlayerPos(), &_inputManger);
+    _player->init(5.0f, _levels[_currentLevel]->getStartPlayerPos(), &_inputManger);
 
     _humans.push_back(_player);
 }

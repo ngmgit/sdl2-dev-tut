@@ -1,6 +1,7 @@
 #include "Agent.h"
 #include <Myengine/ResourceManager.h>
 #include "Level.h"
+#include <algorithm>
 
 Agent::Agent()
 {
@@ -45,8 +46,8 @@ void Agent::checkTilePosition(const std::vector<std::string> &levelData,
                               std::vector<glm::vec2> &collideTilePositions,
                               float x, float y)
 {
-    glm::vec2 cornerPos = glm::vec2(floor(_position.x / float(TILE_WIDTH)),
-                                    floor(_position.y / float(TILE_WIDTH)));
+    glm::vec2 cornerPos = glm::vec2(floor(x / float(TILE_WIDTH)),
+                                    floor(y / float(TILE_WIDTH)));
 
     if (levelData[cornerPos.y][cornerPos.x] != '.') {
         collideTilePositions.push_back(cornerPos * (float)TILE_WIDTH + glm::vec2((float)TILE_WIDTH/2.0f));
@@ -60,20 +61,27 @@ void Agent::collideWithTile(glm::vec2 tilePos)
     const float TILE_RADIUS = (float) TILE_WIDTH / 2.0;
     const float MIN_DISTANCE = AGENT_RADIUS + TILE_RADIUS;
 
-    glm::vec2 distVec = _position - tilePos;
+    glm::vec2 centerPlayerPos = _position + glm::vec2(AGENT_RADIUS);
+    glm::vec2 distVec = centerPlayerPos - tilePos;
 
-    float xDepth = MIN_DISTANCE - distVec.x;
-    float yDepth = MIN_DISTANCE - distVec.y;
+    float xDepth = MIN_DISTANCE - abs(distVec.x);
+    float yDepth = MIN_DISTANCE - abs(distVec.y);
 
-    float absXDepth = abs(xDepth);
-    float absYDepth = abs(yDepth);
+    if (xDepth > 0 || yDepth > 0) {
 
-    if (absXDepth > 0 || absYDepth > 0) {
+        if (std::max(xDepth, 0.0f) < std::max(yDepth, 0.0f)) {
+            if (distVec.x < 0) {
+                _position.x -= xDepth;
+            } else {
+                _position.x += xDepth;
+            }
 
-        if (absXDepth < absYDepth) {
-            _position += xDepth;
         } else {
-            _position += yDepth;
+            if (distVec.y < 0) {
+                _position.y -= yDepth;
+            } else {
+                _position.y += yDepth;
+            }
         }
     }
 }
