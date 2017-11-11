@@ -5,7 +5,7 @@
 #include <Myengine/SpriteBatch.h>
 #include <string>
 
-const float AGENT_WIDTH = 60;
+const float AGENT_WIDTH = 44.0f;
 
 class Zombie;
 class Human;
@@ -19,7 +19,9 @@ public:
                         std::vector<Human*> &humans,
                         std::vector<Zombie*> &zombies) = 0;
 
-    void collideWithLevel(const std::vector<std::string> &levelData);
+    bool collideWithLevel(const std::vector<std::string> &levelData);
+
+    bool collideWithAgent(Agent* agent);
 
     void draw(Myengine::SpriteBatch &spriteBatch);
 

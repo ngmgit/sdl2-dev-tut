@@ -7,7 +7,7 @@
 
 #include <Myengine/SpriteBatch.h>
 
-const int TILE_WIDTH = 64;
+const int TILE_WIDTH = 48;
 class Level {
 public:
     //load the level
@@ -20,6 +20,9 @@ public:
     const std::vector<std::string>& getLevelData() const { return _levelData; }
     glm::vec2 getStartPlayerPos() const { return _startPlayerPos; }
     const std::vector<glm::vec2>& getZombieStartPositions() const { return _zombieStartPositions; }
+    int getNumHumans() { return _numHumans; }
+    int getWidth() { return _levelData[0].size(); }
+    int getHeight() { return _levelData.size(); }
 
 private:
     std::vector<std::string> _levelData;

@@ -11,7 +11,7 @@ Agent::~Agent()
 {
 }
 
-void Agent::collideWithLevel(const std::vector<std::string> &levelData)
+bool Agent::collideWithLevel(const std::vector<std::string> &levelData)
 {
     std::vector<glm::vec2> collideTilePositions;
 
@@ -36,10 +36,15 @@ void Agent::collideWithLevel(const std::vector<std::string> &levelData)
                       collideTilePositions,
                       _position.x + AGENT_WIDTH,
                       _position.y + AGENT_WIDTH);
+    if (collideTilePositions.size() ==0) {
+        return false;
+    }
 
     for ( int i = 0; i < collideTilePositions.size(); i++) {
         collideWithTile(collideTilePositions[i]);
     }
+
+    return true;
 }
 
 void Agent::checkTilePosition(const std::vector<std::string> &levelData,
@@ -49,6 +54,11 @@ void Agent::checkTilePosition(const std::vector<std::string> &levelData,
     glm::vec2 cornerPos = glm::vec2(floor(x / float(TILE_WIDTH)),
                                     floor(y / float(TILE_WIDTH)));
 
+    // If outside the level world just return
+    if (cornerPos.x < 0 || cornerPos.x >= levelData[0].length() ||
+        cornerPos.y < 0 || cornerPos.y >= levelData.size()) {
+        return;
+    }
     if (levelData[cornerPos.y][cornerPos.x] != '.') {
         collideTilePositions.push_back(cornerPos * (float)TILE_WIDTH + glm::vec2((float)TILE_WIDTH/2.0f));
     }
@@ -86,6 +96,26 @@ void Agent::collideWithTile(glm::vec2 tilePos)
     }
 }
 
+bool Agent::collideWithAgent(Agent* agent)
+{
+    float AGENT_RADIUS = AGENT_WIDTH / 2;
+    float MIN_DISTANCE = AGENT_WIDTH;
+
+    glm::vec2 centerPosA = _position + glm::vec2(AGENT_RADIUS);
+    glm::vec2 centerPosB = agent->getPosition() + glm::vec2(AGENT_RADIUS);
+
+    glm::vec2 distVec =centerPosA - centerPosB;
+    float distance = glm::length(distVec);
+
+    float collisionDepth = MIN_DISTANCE - distance;
+    if (collisionDepth > 0) {
+        glm::vec2 collisionDepthVec = glm::normalize(distVec) * collisionDepth;
+        _position +=collisionDepthVec / 2.0f;
+        agent->_position -= collisionDepthVec / 2.0f;
+        return true;
+    }
+    return false;
+}
 void Agent::draw(Myengine::SpriteBatch &spriteBatch)
 {
     static int textureID = Myengine::ResourceManager::getTexture("textures/zombie/circle.png").id;
