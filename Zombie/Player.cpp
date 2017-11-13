@@ -17,6 +17,8 @@ void Player::init(float speed, glm::vec2 pos,
     Myengine::Camera2D* camera,
     std::vector<Bullet>* bullets)
 {
+    _health = 150;
+
     _inputManager = inputManger;
     _camera = camera;
     _bullets = bullets;

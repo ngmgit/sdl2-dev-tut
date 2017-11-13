@@ -78,7 +78,7 @@ void Agent::collideWithTile(glm::vec2 tilePos)
     float xDepth = MIN_DISTANCE - abs(distVec.x);
     float yDepth = MIN_DISTANCE - abs(distVec.y);
 
-    if (xDepth > 0 || yDepth > 0) {
+    if (xDepth > 0 && yDepth > 0) {
 
         if (std::max(xDepth, 0.0f) < std::max(yDepth, 0.0f)) {
             if (distVec.x < 0) {
@@ -130,4 +130,14 @@ void Agent::draw(Myengine::SpriteBatch &spriteBatch)
     destRect.w = AGENT_WIDTH;
 
     spriteBatch.draw(destRect, uvRect, textureID, 0.0f, _color);
+}
+
+bool Agent::applyDamage(float damage)
+{
+    _health -= damage;
+    if (_health <=0) {
+        return true;
+    } else {
+        return false;
+    }
 }

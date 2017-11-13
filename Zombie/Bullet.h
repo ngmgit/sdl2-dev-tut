@@ -2,10 +2,12 @@
 #define BULLET_H
 
 #include <vector>
+#include <string>
 #include <glm/glm.hpp>
 
 #include <Myengine/SpriteBatch.h>
 
+class Agent;
 class Human;
 class Zombie;
 
@@ -16,11 +18,18 @@ public:
     Bullet(float damage, glm::vec2 position, glm::vec2 direction, float speed);
     ~Bullet();
 
-    void update(std::vector<Human*> &humans,
-                std::vector<Zombie*> &zombies);
+    // when it returns true want to delete the bullet
+    bool update(const std::vector<std::string> &levelData);
 
     void draw(Myengine::SpriteBatch &spriteBatch);
+
+    bool collideWithAgent(Agent* agent);
+
+    float getDamage() { return _damage; }
+
 private:
+
+    bool collideWithWorld(const std::vector<std::string>&level);
     float _damage;
     glm::vec2 _position;
     glm::vec2 _direction;

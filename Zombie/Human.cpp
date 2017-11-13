@@ -14,6 +14,8 @@ Human::~Human()
 
 void Human::init(float speed, glm::vec2 pos)
 {
+    _health = 20;
+
     static std::mt19937 randomEngine(time(nullptr));
     static std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
 

@@ -26,6 +26,9 @@ public:
 
     void draw(Myengine::SpriteBatch &spriteBatch);
 
+    // return true if died
+    bool applyDamage(float damage);
+
     glm::vec2 getPosition() const { return _position; }
 
 protected:
@@ -38,6 +41,7 @@ protected:
     glm::vec2 _position;
     float _speed;
     Myengine::Color _color;
+    float _health;
 };
 
 #endif // AGENT_H

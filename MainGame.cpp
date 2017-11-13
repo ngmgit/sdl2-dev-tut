@@ -17,7 +17,9 @@ MainGame::MainGame() :
     _screenWidth(1024),
     _screenHeight(768),
     _gameState(GameState::PLAY),
-    _player(nullptr)
+    _player(nullptr),
+    _numHumansKilled(0),
+    _numZombiesKilled(0)
 {
 }
 
@@ -80,9 +82,9 @@ void MainGame::initLevel()
 
     // set up the player guns
     const float BULLET_SPEED = 20.0f;
-    _player->addGun(new Gun("Magnum", 30, 1, 10.0f, BULLET_SPEED, 30));
-    _player->addGun(new Gun("Shotgun", 60, 20, 40.0f, BULLET_SPEED, 4));
-    _player->addGun(new Gun("MP5", 5, 1, 20.0f, BULLET_SPEED, 20));
+    _player->addGun(new Gun("Magnum", 10, 1, 5.0f, BULLET_SPEED, 30));
+    _player->addGun(new Gun("Shotgun", 60, 7, 20.0f, BULLET_SPEED, 4));
+    _player->addGun(new Gun("MP5", 2, 1, 10.0f, BULLET_SPEED, 20));
 }
 
 void MainGame::initShaders()
@@ -102,6 +104,8 @@ void MainGame::gameLoop()
 
     while (_gameState == GameState::PLAY) {
         fpsLimiter.begin();
+
+        checkVictory();
 
         processInput();
 
@@ -171,8 +175,91 @@ void MainGame::updateAgents()
 
 void MainGame::updateBullets()
 {
+    // update and collde with world
+    for (int i = 0; i < _bullets.size();) {
+        // if update returns true the bullet collided with a wall
+        // if so we remove the bullet
+        if (_bullets[i].update(_levels[_currentLevel]->getLevelData())) {
+            _bullets[i] = _bullets.back();
+            _bullets.pop_back();
+        } else {
+             i++;
+        }
+    }
+
+    bool wasBulletRemoved;
+    // Collide with zombies or humans
     for (int i = 0; i < _bullets.size(); i++) {
-        _bullets[i].update(_humans, _zombies);
+        wasBulletRemoved = false;
+        // check for zombies
+        for (int j = 0; j < _zombies.size();) {
+            // damage zombie and kill if out of health
+            if (_bullets[i].collideWithAgent(_zombies[j])) {
+                 // Damage the zombie
+                if(_zombies[j]->applyDamage(_bullets[i].getDamage())) {
+                    delete _zombies[j];
+                    _zombies[j] = _zombies.back();
+                    _zombies.pop_back();
+                    _numZombiesKilled++;
+                } else {
+                     j++;
+                }
+
+                // remove bullet
+                _bullets[i] = _bullets.back();
+                _bullets.pop_back();
+                wasBulletRemoved = true;
+                i--; // to make sure we dont skip the bullet
+                // since the bullet was hit we can skip its comparisin with other zombies
+                break;
+
+            } else {
+                j++;
+            }
+        }
+
+        // Check for humans if the bullet didnt hit any zombies
+        if (wasBulletRemoved == false) {
+            for (int j = 1; j < _humans.size();) {
+                // damage human and kill if out of health
+                if (_bullets[i].collideWithAgent(_humans[j])) {
+                    // Damage the human
+                    if(_humans[j]->applyDamage(_bullets[i].getDamage())) {
+                        delete _humans[j];
+                        _humans[j] = _humans.back();
+                        _humans.pop_back();
+                        _numHumansKilled++;
+                    } else {
+                        j++;
+                    }
+
+                    // remove bullet
+                    _bullets[i] = _bullets.back();
+                    _bullets.pop_back();
+                    wasBulletRemoved = true;
+                    i--; // to make sure we dont skip the bullet
+                    // since the bullet was hit we can skip its comparisin with other humans
+                    break;
+
+                } else {
+                    j++;
+                }
+            }
+        }
+
+    }
+
+}
+
+void MainGame::checkVictory() {
+    // TODO: support for multiple levels!
+    if (_zombies.empty()) {
+        std::printf("*** You won! *** \n You killed %d humans and %d zombies.\n There are %d/%d humans remaining",
+                    _numHumansKilled,
+                    _numZombiesKilled,
+                    _humans.size() - 1,
+                    _levels[_currentLevel]->getNumHumans());
+        Myengine::fatalError("");
     }
 }
 

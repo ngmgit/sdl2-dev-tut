@@ -43,6 +43,9 @@ private:
     // update bullets
     void updateBullets();
 
+    // Check victory
+    void checkVictory();
+
     // Handle the input processing
     void processInput();
     // Main game loop for the program
@@ -70,6 +73,10 @@ private:
     std::vector<Zombie*> _zombies;
 
     std::vector<Bullet> _bullets;
+
+    int _numHumansKilled; ///< Humans killed by player
+    int _numZombiesKilled; ///< zombies killed by player
+
 };
 
 #endif
