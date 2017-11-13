@@ -11,6 +11,7 @@
 
 #include "Zombie/Level.h"
 #include "Zombie/Player.h"
+#include "Zombie/Bullet.h"
 
 class Zombie;
 
@@ -36,8 +37,11 @@ private:
     // initialize the shaders
     void initShaders();
 
-    // update
+    // update agents
     void updateAgents();
+
+    // update bullets
+    void updateBullets();
 
     // Handle the input processing
     void processInput();
@@ -64,6 +68,8 @@ private:
     //vector of all humans
     std::vector<Human*> _humans;
     std::vector<Zombie*> _zombies;
+
+    std::vector<Bullet> _bullets;
 };
 
 #endif

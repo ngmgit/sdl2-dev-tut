@@ -2,8 +2,9 @@
 #define AGENT_H
 
 #include <glm/glm.hpp>
-#include <Myengine/SpriteBatch.h>
 #include <string>
+
+#include <Myengine/SpriteBatch.h>
 
 const float AGENT_WIDTH = 44.0f;
 

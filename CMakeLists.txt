@@ -11,6 +11,8 @@ set(source_files
         Zombie/Human.cpp
         Zombie/Player.cpp
         Zombie/Zombie.cpp
+        Zombie/Gun.cpp
+        Zombie/Bullet.cpp
     )
 
 set(output_name "game.app")

@@ -1,7 +1,10 @@
 #include "Player.h"
 #include <SDL2/SDL.h>
 
-Player::Player()
+#include "Gun.h"
+
+Player::Player() :
+    _currentGunIndex(-1)
 {
 }
 
@@ -9,9 +12,14 @@ Player::~Player()
 {
 }
 
-void Player::init(float speed, glm::vec2 pos, Myengine::InputManger* inputManger)
+void Player::init(float speed, glm::vec2 pos,
+    Myengine::InputManger* inputManger,
+    Myengine::Camera2D* camera,
+    std::vector<Bullet>* bullets)
 {
     _inputManager = inputManger;
+    _camera = camera;
+    _bullets = bullets;
 
     _speed = speed;
     _position = pos;
@@ -38,5 +46,37 @@ void Player::update(const std::vector<std::string> &levelData,
         _position.x += _speed;
     }
 
+    if (_inputManager->isKeyPressed(SDLK_1) && _guns.size() >= 0) {
+        _currentGunIndex = 0;
+    } else if (_inputManager->isKeyPressed(SDLK_2) && _guns.size() >= 1) {
+        _currentGunIndex = 1;
+    } else if (_inputManager->isKeyPressed(SDLK_3) && _guns.size() >= 2) {
+        _currentGunIndex = 2;
+    }
+
+    if (_currentGunIndex != -1) {
+
+        glm::vec2 mouseCoords = _inputManager->getMouseCoords();
+        mouseCoords = _camera->convertScreenToWorld(mouseCoords);
+
+        glm::vec2 centerPosition = _position + glm::vec2(AGENT_WIDTH / 2);
+
+        glm::vec2 direction = glm::normalize(mouseCoords - centerPosition);
+
+        _guns[_currentGunIndex]->update(_inputManager->isKeyPressed(SDL_BUTTON_LEFT),
+                                        centerPosition,
+                                        direction,
+                                        *_bullets);
+    }
     collideWithLevel(levelData);
+}
+
+void Player::addGun(Gun* gun) {
+    // Add the gun to his inventory
+    _guns.push_back(gun);
+
+    // if no gun is equippped, equip gun
+    if (_currentGunIndex == -1) {
+        _currentGunIndex = 0;
+    }
 }

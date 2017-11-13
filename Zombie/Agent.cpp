@@ -1,7 +1,8 @@
 #include "Agent.h"
+#include <algorithm>
+
 #include <Myengine/ResourceManager.h>
 #include "Level.h"
-#include <algorithm>
 
 Agent::Agent()
 {
@@ -116,6 +117,7 @@ bool Agent::collideWithAgent(Agent* agent)
     }
     return false;
 }
+
 void Agent::draw(Myengine::SpriteBatch &spriteBatch)
 {
     static int textureID = Myengine::ResourceManager::getTexture("textures/zombie/circle.png").id;

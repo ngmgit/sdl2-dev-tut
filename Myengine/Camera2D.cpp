@@ -1,4 +1,5 @@
 #include "Camera2D.h"
+#include <glm/gtx/rotate_vector.hpp>
 
 namespace Myengine {
 
