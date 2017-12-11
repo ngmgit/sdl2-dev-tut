@@ -44,6 +44,18 @@ set(LINKER_FLAGS "${SDL_LINK_FLAGS} ${GLEW_LINK_FLAGS}")
 # *** add the executable ***
 add_executable(${output_name} main.cpp ${source_files})
 
+# To add assets symlinks and add target dependecy to make it execute before ${output_name} target is built
+if (${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
+    message("Build directory is same as source directory: not using symlink for assets")
+else()
+    message("Please make sure the assets are symlinked properly in the build directory, else errors like 'File not found' maybe encountered")
+    ADD_CUSTOM_TARGET(symlink_assets ALL
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/shaders ./shaders
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/levels ./levels
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/textures ./textures)
+    add_dependencies(${output_name} symlink_assets)
+endif()
+
 
 # *** set cmake linker and compiler flags ***
 add_compile_options(${COMPILER_FLAGS})

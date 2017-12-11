@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
+            "label": "build",
             "type": "shell",
-            "command": "make all",
+            "command": "cd build/debug && make all",
             "presentation": {
                 "reveal": "always",
                 "focus": true,
@@ -22,9 +22,9 @@
             ]
         },
         {
-            "taskName": "run",
+            "label": "run",
             "type": "shell",
-            "command": "${cwd}/game.app",
+            "command": "${cwd}/build/debug/game.app",
             "presentation": {
                 "reveal": "always",
                 "focus": true,

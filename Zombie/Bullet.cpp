@@ -33,7 +33,7 @@ void Bullet::draw(Myengine::SpriteBatch &spriteBatch)
 
     const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
-    Myengine::Color color;
+    Myengine::ColorRGBA8 color;
     color.r = 75;
     color.g = 128;
     color.b = 128;

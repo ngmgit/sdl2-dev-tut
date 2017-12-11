@@ -46,7 +46,7 @@ void SpriteBatch::draw(const glm::vec4 &destRect,
                     const  glm::vec4 &uvRect,
                     GLuint texture,
                     float  depth,
-                    const  Color &color)
+                    const  ColorRGBA8 &color)
 {
     Glyph* newGlyph = new Glyph;
 

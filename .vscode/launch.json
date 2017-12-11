@@ -5,7 +5,7 @@
 				"name": "(gdb) Launch",
 				"type": "cppdbg",
 				"request": "launch",
-				"program": "${workspaceRoot}/game.app",
+				"program": "${workspaceRoot}/build/debug/game.app",
 				"args": [],
 				"stopAtEntry": false,
 				"cwd": "${workspaceRoot}",

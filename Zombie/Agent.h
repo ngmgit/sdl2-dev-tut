@@ -40,7 +40,7 @@ protected:
 
     glm::vec2 _position;
     float _speed;
-    Myengine::Color _color;
+    Myengine::ColorRGBA8 _color;
     float _health;
 };
 

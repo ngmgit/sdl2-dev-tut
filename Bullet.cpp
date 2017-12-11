@@ -18,7 +18,7 @@ void Bullet::draw(Myengine::SpriteBatch &spriteBatch)
     glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
     static Myengine::GLTexture texture = Myengine::ResourceManager::getTexture("textures/jimmy-jump-pack/PNG/CharacterRight_Standing.png");
 
-    Myengine::Color color;
+    Myengine::ColorRGBA8 color;
     color.r = 255;
     color.g = 255;
     color.b = 255;
