@@ -34,18 +34,19 @@ void Player::init(float speed, glm::vec2 pos,
 
 void Player::update(const std::vector<std::string> &levelData,
     std::vector<Human*> &humans,
-    std::vector<Zombie*> &zombies)
+    std::vector<Zombie*> &zombies,
+    float deltaTime)
 {
     if (_inputManager->isKeyDown(SDLK_w)) {
-        _position.y += _speed;
+        _position.y += _speed * deltaTime;
     } else if (_inputManager->isKeyDown(SDLK_s)) {
-        _position.y -= _speed;
+        _position.y -= _speed * deltaTime;
     }
 
     if (_inputManager->isKeyDown(SDLK_a)) {
-        _position.x -= _speed;
+        _position.x -= _speed * deltaTime;
     } else if (_inputManager->isKeyDown(SDLK_d)) {
-        _position.x += _speed;
+        _position.x += _speed * deltaTime;
     }
 
     if (_inputManager->isKeyDown(SDLK_1) && _guns.size() >= 0) {
@@ -68,7 +69,8 @@ void Player::update(const std::vector<std::string> &levelData,
         _guns[_currentGunIndex]->update(_inputManager->isKeyPressed(SDL_BUTTON_LEFT),
                                         centerPosition,
                                         direction,
-                                        *_bullets);
+                                        *_bullets,
+                                        deltaTime);
     }
     collideWithLevel(levelData);
 }

@@ -19,7 +19,7 @@ public:
     ~Bullet();
 
     // when it returns true want to delete the bullet
-    bool update(const std::vector<std::string> &levelData);
+    bool update(const std::vector<std::string> &levelData, float deltaTime);
 
     void draw(Myengine::SpriteBatch &spriteBatch);
 

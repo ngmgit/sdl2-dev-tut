@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <random>
+#include <algorithm>
 
 #include <Myengine/Myengine.h>
 #include <Myengine/Timer.h>
@@ -99,11 +100,25 @@ void MainGame::initShaders()
 
 void MainGame::gameLoop()
 {
+    const float DESIRED_FPS = 60.0f;
+    const int MAX_PHYSICS_STEPS = 6;
+
     Myengine::FpsLimiter fpsLimiter;
     fpsLimiter.setMaxFps(60.0f);
 
+    const float MS_PER_SECOND = 1000;
+    const float DESIRED_FRAMETIME = MS_PER_SECOND/ 60;
+    const float MAX_DELTA_TIME = 1.0f;
+
+    float prevTicks = SDL_GetTicks();
+
     while (_gameState == GameState::PLAY) {
         fpsLimiter.begin();
+
+        float newTicks = SDL_GetTicks();
+        float frameTime = newTicks - prevTicks;
+        prevTicks = newTicks;
+        float totalDeltaTime = frameTime / DESIRED_FRAMETIME;
 
         checkVictory();
 
@@ -111,9 +126,15 @@ void MainGame::gameLoop()
 
         processInput();
 
-        updateAgents();
+        int i = 0;
+        while (totalDeltaTime > 0.0f && i < MAX_PHYSICS_STEPS) {
+            float deltaTime = std::min(totalDeltaTime, MAX_DELTA_TIME);
+            updateAgents(deltaTime);
+            updateBullets(deltaTime);
 
-        updateBullets();
+            totalDeltaTime -= deltaTime;
+            i++;
+        }
 
         _camera.setPosition(_player->getPosition());
         _camera.update();
@@ -124,20 +145,22 @@ void MainGame::gameLoop()
     }
 }
 
-void MainGame::updateAgents()
+void MainGame::updateAgents(float deltaTime)
 {
     // update all humans
     for (int i = 0; i <_humans.size(); i++) {
         _humans[i]->update(_levels[_currentLevel]->getLevelData(),
                            _humans,
-                           _zombies);
+                           _zombies,
+                           deltaTime);
     }
 
     //Dont forget to update zombies
     for (int i = 0; i <_zombies.size(); i++) {
         _zombies[i]->update(_levels[_currentLevel]->getLevelData(),
                            _humans,
-                           _zombies);
+                           _zombies,
+                           deltaTime);
     }
 
     // update zombie collisions
@@ -175,13 +198,13 @@ void MainGame::updateAgents()
 
 }
 
-void MainGame::updateBullets()
+void MainGame::updateBullets(float deltaTime)
 {
     // update and collde with world
     for (int i = 0; i < _bullets.size();) {
         // if update returns true the bullet collided with a wall
         // if so we remove the bullet
-        if (_bullets[i].update(_levels[_currentLevel]->getLevelData())) {
+        if (_bullets[i].update(_levels[_currentLevel]->getLevelData(), deltaTime)) {
             _bullets[i] = _bullets.back();
             _bullets.pop_back();
         } else {

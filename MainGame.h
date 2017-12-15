@@ -38,10 +38,10 @@ private:
     void initShaders();
 
     // update agents
-    void updateAgents();
+    void updateAgents(float deltaTime);
 
     // update bullets
-    void updateBullets();
+    void updateBullets(float deltaTime);
 
     // Check victory
     void checkVictory();

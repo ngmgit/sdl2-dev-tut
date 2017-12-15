@@ -18,7 +18,8 @@ public:
 
     virtual void update(const std::vector<std::string> &levelData,
                         std::vector<Human*> &humans,
-                        std::vector<Zombie*> &zombies) = 0;
+                        std::vector<Zombie*> &zombies,
+                        float deltaTime) = 0;
 
     bool collideWithLevel(const std::vector<std::string> &levelData);
 
